@@ -1,0 +1,9 @@
+{
+  "id": "org.webosbrew.appupdateblocker",
+  "version": "1.0.0",
+  "vendor": "WebOS Brew",
+  "type": "web",
+  "main": "index.html",
+  "title": "App Update Blocker",
+  "icon": "icon.png"
+}

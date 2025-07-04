@@ -1,0 +1,9 @@
+{
+  "name": "org.webosbrew.appupdateblocker.service",
+  "version": "1.0.0",
+  "description": "App Update Blocker Service",
+  "main": "service.js",
+  "scripts": {
+    "start": "node service.js"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "org.webosbrew.appupdateblocker",
+  "version": "1.0.0",
+  "vendor": "My Company",
+  "type": "web",
+  "main": "index.html",
+  "title": "LG App Update Blocker",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png"
+}

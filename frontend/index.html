@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World App</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3a3a3a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-accent: #4a9eff;
+            --border-color: #4a4a4a;
+            --button-bg: #4a9eff;
+            --button-hover: #357abd;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+            --warning-bg: #3d3315;
+            --warning-text: #ffd54f;
+        }
+        
+        body.light-mode {
+            --bg-primary: #f0f0f0;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8f8f8;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --text-accent: #007acc;
+            --border-color: #e0e0e0;
+            --button-bg: #007acc;
+            --button-hover: #005a9e;
+            --success-color: #090;
+            --error-color: #d00;
+            --warning-bg: #fff3cd;
+            --warning-text: #856404;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .app-container {
+            height: 100vh;
+            overflow-y: auto;
+            padding: 50px;
+            padding-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .theme-toggle:hover {
+            background-color: var(--bg-tertiary);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .header p {
+            max-width: 800px;
+            margin: 20px auto;
+            font-size: 18px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        .cards-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            flex: 1;
+            margin: 0 20px;
+            transition: background-color 0.3s;
+        }
+        .card:first-child {
+            margin-left: 0;
+        }
+        .card:last-child {
+            margin-right: 0;
+        }
+        .response {
+            margin: 20px 50px;
+            padding: 15px;
+            background-color: var(--bg-tertiary);
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .error {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--error-color);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover:not(:disabled) {
+            background-color: var(--button-hover);
+        }
+        button:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .update-info {
+            background-color: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+            transition: background-color 0.3s, border-color 0.3s;
+            box-sizing: border-box;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--text-accent);
+        }
+        .ssh-management-container {
+            display: flex;
+            gap: 30px;
+        }
+        .ssh-management-left {
+            flex: 1;
+            padding-right: 30px;
+            border-right: 1px solid var(--border-color);
+        }
+        .ssh-management-right {
+            flex: 1;
+            padding-left: 30px;
+        }
+        .blocked-apps-warning {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--text-accent);
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌞 Light</button>
+    <div class="app-container">
+        <div class="header">
+        <h1>LG App Update Blocker</h1>
+        <p>This app exists solely because LG refuses to let you use an app when they tell your TV that an update has been made available, forcing you to update it or never use the app again.</p>
+    </div>
+    
+    <div id="response" class="response"></div>
+    
+    <div class="cards-container">
+        <div class="card">
+            <div class="section">
+                <h2>Blocked Apps Status</h2>
+                <h3>These apps require an update before they can be launched</h3>
+                <button id="refreshUpdateInfo" disabled>Refresh Status</button>
+                <button id="clearUpdateInfo" disabled>Remove Forced Update Apps</button>
+                <div id="updateInfoContent" class="update-info">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="section">
+                <h2>Update Domains Blocking</h2>
+                <h3>Block LG update servers to prevent system updates</h3>
+                <div id="hostsStatus" style="margin: 15px 0; font-weight: bold;">Checking hosts file...</div>
+                <button id="addUpdateDomains" disabled>Block Update Domains</button>
+                <button id="removeUpdateDomains" disabled>Unblock Update Domains</button>
+                
+                <div style="margin-top: 20px; padding: 15px; background-color: var(--warning-bg); border-radius: 4px; border: 1px solid var(--border-color);">
+                    <strong style="color: var(--warning-text);">⚠️ Warning:</strong> <span style="color: var(--text-secondary);">Changes to /etc/hosts are not persistent across hard reboots. Install the persistent script below to automatically reapply blocks on boot.</span>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>Persistent Blocking</h4>
+                    <div id="persistentScriptStatus" style="margin: 15px 0; font-weight: bold;">Checking persistent script...</div>
+                    <button id="installPersistentScript" disabled>Install Persistent Script</button>
+                    <button id="removePersistentScript" disabled>Remove Persistent Script</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card" style="margin: 0 0 20px 0;">
+        <div class="section">
+            <h2>SSH Key Management</h2>
+            <div class="ssh-management-container">
+                <div class="ssh-management-left">
+                    <p>Manage SSH keys for root access</p>
+                    <button id="clearSSHKeys" disabled>Clear All SSH Keys</button>
+                    <button id="refreshSSHKeys" disabled>Refresh Keys</button>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 10px;">Note: The root password is "alpine". Hard reboot required to re-enable password auth after clearing keys.</p>
+                    <div id="sshKeysContent" class="update-info" style="margin: 15px 0;">Loading...</div>
+                </div>
+                
+                <div class="ssh-management-right">
+                    <h3 style="margin-top: 0;">Add New SSH Key</h3>
+                    <p style="color: var(--text-secondary); font-size: 14px;">Paste your public SSH key below (e.g., ssh-rsa AAAA... user@host)</p>
+                    <textarea id="sshKeyInput" placeholder="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... user@example.com" disabled></textarea>
+                    <button id="addSSHKey" disabled style="margin-top: 10px;">Add SSH Key</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; padding: 20px 0; color: var(--text-secondary); font-size: 14px;">
+        Made by <a href="https://github.com/dr0dr1dr2dr3" style="color: var(--text-accent); text-decoration: none;">https://github.com/dr0dr1dr2dr3</a>
+    </div>
+    
+    <script src="index.js"></script>
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                themeToggle.textContent = '🌞 Light';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '🌙 Dark';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            document.querySelector('.theme-toggle').textContent = '🌙 Dark';
+        }
+    </script>
+</body>
+</html>
